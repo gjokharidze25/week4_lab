@@ -1,0 +1,14 @@
+Differences between RSA and AES
+
+Algorithm type
+- RSA is asymmetric
+- AES is symmetric
+
+Performance
+- RSA is mathematically heavy
+- AES is very fast and optimized
+
+Use-case
+- RSA is typically used to protect small pieces of data: keys, session secrets, certificates.
+- AES is used to protect the actual bulk data
+
