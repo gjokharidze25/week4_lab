@@ -1,0 +1,27 @@
+1. TLS Handshake Explanation
+
+When a client connects to an HTTPS website, it performs a TLS handshake.
+Steps (TLS 1.2/1.3 view):
+- ClientHello: client proposes TLS version + cipher suites + random.
+- ServerHello: server picks version and cipher suite, sends its random.
+- Certificate: server sends X.509 certificate signed by a trusted CA.
+- (Key Exchange): client and server agree on a shared secret (RSA or ECDHE/X25519).
+- Session key derivation: both sides derive the same symmetric keys.
+- Finished messages: both sides prove they derived the same keys.
+After this, application data is encrypted with symmetric crypto (typically AES-GCM or ChaCha20-Poly1305).
+
+2. What protects against MITM
+
+- Certificate + PKI: the server certificate is signed by a trusted CA, the client verifies this.
+  If an attacker tries to impersonate the server with a fake certificate, the browser will not trust it.
+- Key exchange with authenticity: attacker cannot complete the handshake without a valid certificate/private key.
+- Optional: certificate pinning / CT logs further reduce MITM opportunities.
+Therefore, even if an attacker can see the traffic, they cannot decrypt or modify it without breaking the cert trust.
+
+3. How TLS secures HTTPS communications
+
+- Confidentiality: after handshake, all HTTP data is encrypted with a symmetric key -> eavesdroppers see only ciphertext.
+- Integrity: MAC / AEAD (e.g. AES-GCM) ensures that modified packets are detected and dropped.
+- Authentication: the certificate proves the client is talking to the real server.
+This is why login forms, online banking, and payments use HTTPS/TLS.
+
